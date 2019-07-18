@@ -10,7 +10,7 @@ namespace TriggerDeadLetterQueue
 {
     public static class Function1
     {
-        [FunctionName("Function1")]
+        [FunctionName("FunctionDeadLetterQueue")]
         public static async Task Run([TimerTrigger("*/3 * * * * *")]TimerInfo myTimer, ILogger log)
         {
 
