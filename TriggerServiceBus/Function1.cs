@@ -1,6 +1,5 @@
 
 using FrameworkTest;
-using Microsoft.ApplicationInsights;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using Microsoft.ServiceBus.Messaging;
@@ -10,19 +9,26 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 
+
 namespace TriggerServiceBus
 {
     public static class Function1
     {
 
-
+        /**
+         * Trigger che viene pubblicato su Azure com FunctionApp
+         * Si crea un ServiceBusTrigger che legge sulla coda ServiceBus di Azure, con diritti di accesso Manage
+         * il trigger legge già il BrokeredMessage e lo "parsa direttamente"
+         * ILogger viene collegato a un Application Insights collegato
+         * Con TelemetryCLient si crea manualmente "uno strumento di misurazione" per Application Insights
+         * */
 
         [FunctionName("Function1")]
         public static void Run([ServiceBusTrigger("testqueue", AccessRights.Manage, Connection = "AzureWebJobsServiceBus")]Example myQueueItem, ILogger log)
         {
-            TelemetryClient telemetry = new TelemetryClient();
+            //TelemetryClient telemetry = new TelemetryClient();
             //telemetry.InstrumentationKey = System.Environment.GetEnvironmentVariable("APP_INSIGHTS_KEY");
-            telemetry.InstrumentationKey = "9dd68603-24f1-4b90-99ae-59b142d22794";
+            //telemetry.InstrumentationKey = "9dd68603-24f1-4b90-99ae-59b142d22794";
             var sw = Stopwatch.StartNew();
             var time = DateTime.Now;
             if (myQueueItem.campo.Equals("intero"))
@@ -51,7 +57,7 @@ namespace TriggerServiceBus
                     catch { }
                     log.LogInformation($"C# Operazione Insert tramite Stored Procedure del valore : {myQueueItem.valore} , completata con esito : {1}");
 
-                    telemetry.TrackRequest("Insert SP", time, sw.Elapsed, "200", true);
+                    //telemetry.TrackRequest("Insert SP", time, sw.Elapsed, "200", true);
                 }
             }
             else if (myQueueItem.campo.Equals("Update")) {
@@ -62,7 +68,7 @@ namespace TriggerServiceBus
                     db.Test_Trigger.Where(x => x.valore.Value.Equals(myQueueItem.valore)).ToList().ForEach(c => c.campo = myQueueItem.campo);
                     var result = db.SaveChanges();
                     log.LogInformation($"C# Operazione Update tramite LINQ & EntityFramework : {myQueueItem.valore} , completata con esito : {result}");
-                    telemetry.TrackRequest("Update SP", time, sw.Elapsed, "200", true);
+                    //telemetry.TrackRequest("Update SP", time, sw.Elapsed, "200", true);
                 }
             }
             else
@@ -77,7 +83,7 @@ namespace TriggerServiceBus
                     db.Test_Trigger.RemoveRange(a);
                     var result = db.SaveChanges();
                     log.LogInformation($"C# Operazione Delete tramite LINQ & EntityFramework : {myQueueItem.valore} , completata con esito : {result}");
-                    telemetry.TrackRequest("Delete SP", time, sw.Elapsed, "200", true);
+                    //telemetry.TrackRequest("Delete SP", time, sw.Elapsed, "200", true);
                 }
 
 

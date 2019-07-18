@@ -3,8 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using Microsoft.ServiceBus;
-    using Microsoft.ServiceBus.Messaging;
     using SBTEST.Model;
     using SBTEST.UtilityServiceBus;
 
@@ -27,6 +25,7 @@
             Console.WriteLine("======================================================");
             Console.WriteLine("Press ENTER key to exit after sending all the messages.");
             Console.WriteLine("======================================================");
+            Console.ReadKey();
             List<Example> inviare = new List<Example>();
             Console.ReadKey();
             for (var i = 0; i < 10; i++)
@@ -39,42 +38,46 @@
                 };
                 inviare.Add(aux);
             }
+            // Metodo per inviare degli oggetti Al service Bus: gli elementi della lista non vengono parsizzati con Json ma vengono 
+            // direttamente trasformati nel Brokered Message
+
             //await UtilityBus<Example>.SendMessagesAsync(inviare);
+
             await UtilityBus<Example>.SendMessagesAsyncJ(inviare);
             Console.WriteLine("======================================================");
             Console.WriteLine("Test DELETE , PRESS ANY KEY");
             Console.WriteLine("======================================================");
             Console.ReadKey();
-            List<Example> invioDelete = new List<Example>()
-            {
-                new Example
-                {
-                    campo = "Delete",
-                    valore = 2
-                }
-            };
-            await UtilityBus<Example>.SendMessagesAsyncJ(invioDelete);
-            //Send Messages
+            //List<Example> invioDelete = new List<Example>()
+            //{
+            //    new Example
+            //    {
+            //        campo = "Delete",
+            //        valore = 2
+            //    }
+            //};
+            //await UtilityBus<Example>.SendMessagesAsyncJ(invioDelete);
+            ////Send Messages
 
-            Console.WriteLine("======================================================");
-            Console.WriteLine("Esecuzione Delete terminata");
-            Console.WriteLine("======================================================");
-            Console.ReadKey();
-            List<Example> invioUpdate = new List<Example>()
-            {
-                new Example
-                {
-                    campo = "Update",
-                    valore = 6
-                }
-            };
-            await UtilityBus<Example>.SendMessagesAsyncJ(invioUpdate);
-            //Send Messages
+            //Console.WriteLine("======================================================");
+            //Console.WriteLine("Esecuzione Delete terminata");
+            //Console.WriteLine("======================================================");
+            //Console.ReadKey();
+            //List<Example> invioUpdate = new List<Example>()
+            //{
+            //    new Example
+            //    {
+            //        campo = "Update",
+            //        valore = 6
+            //    }
+            //};
+            //await UtilityBus<Example>.SendMessagesAsyncJ(invioUpdate);
+            ////Send Messages
 
-            Console.WriteLine("======================================================");
-            Console.WriteLine("Esecuzione Update terminata");
-            Console.WriteLine("======================================================");
-            Console.ReadKey();
+            //Console.WriteLine("======================================================");
+            //Console.WriteLine("Esecuzione Update terminata");
+            //Console.WriteLine("======================================================");
+            //Console.ReadKey();
 
 
         }

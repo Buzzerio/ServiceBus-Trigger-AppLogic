@@ -2,10 +2,8 @@
 using Microsoft.ServiceBus.Messaging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SBTEST.Model;
 using System.Configuration;
 using Newtonsoft.Json;
 using System.IO;
@@ -14,9 +12,7 @@ namespace SBTEST.UtilityServiceBus
 {
     public static class UtilityBus<T>
     {
-        //public const string ServiceBusConnectionString = "Endpoint=sb://bustestdomenico.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=v8+8wIIxOYE9QA07Xd0U494K8hdC9D3wLS5GSaKK/gM=";
-        //const string QueueName = "testqueue";
-
+        
         public static NamespaceManager spaceManager { get; set; }
 
         static UtilityBus()
@@ -29,6 +25,10 @@ namespace SBTEST.UtilityServiceBus
             }
         }
 
+        /**
+         *  Metodo per inviare degli oggetti Al service Bus: gli elementi della lista non vengono parsizzati con Json ma vengono 
+             direttamente trasformati nel Brokered Message
+         * */
         public static async Task SendMessagesAsync(List<T> daInviare)
         {
             
@@ -53,6 +53,10 @@ namespace SBTEST.UtilityServiceBus
 
         }
 
+        /**
+         *  Metodo per inviare degli oggetti Al service Bus: gli elementi della lista vengono parsizzati con Json in modo che la Logic App
+         *  riesce a leggerli
+         * */
         public static async Task SendMessagesAsyncJ(List<T> daInviare)
         {
 

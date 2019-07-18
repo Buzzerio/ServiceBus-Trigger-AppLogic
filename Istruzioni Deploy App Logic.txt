@@ -1,0 +1,2 @@
+Nel Parse JSON 
+nel content va inserito tramite expression : base64ToString(triggerBody()?['ContentData'])
